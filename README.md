@@ -4,7 +4,11 @@ Digity is an application built in Kotlin, to run on a web browser, using Ktor.
 
 It accepts a user-uploaded image and classifies it as a digit [0-9] using Tensorflow.
 
-## Environment Setup
+## Python Environment Setup (Training)
+https://www.tensorflow.org/install/pip
+
+
+## Java Environment Setup (Predicting)
 
 Build Tensorflow Java API:
 
