@@ -93,6 +93,8 @@ fun Application.module(testing: Boolean = false) {
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))
         }
+
+        initTensorFlow()
     }
 }
 
