@@ -7,7 +7,7 @@ import org.tensorflow.TensorFlow
 
 fun initTensorFlow() {
     Graph().use { graph ->
-        val value = "Hello from ${TensorFlow.version()}"
+        val value = "Hello from TensorFlow ${TensorFlow.version()}"
 
         // Construct the computation graph with a single operation, a constant
         // named "MyConst" with a value "value".
@@ -19,6 +19,7 @@ fun initTensorFlow() {
 
         // Execute the "MyConst" operation in a Session.
         Session(graph).use { session ->
+
             // Generally, there may be multiple output tensors,
             // all of them must be closed to prevent resource leaks.
             session.runner().fetch("MyConst").run()[0].use { output ->
