@@ -6,6 +6,8 @@ It accepts a user-uploaded image and classifies it as a digit [0-9] using Tensor
 
 ## Environment Setup
 
+Build Tensorflow Java API:
+
     # install bazel
     sudo apt-get install openjdk-8-jdk
     echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
@@ -13,12 +15,13 @@ It accepts a user-uploaded image and classifies it as a digit [0-9] using Tensor
     sudo apt-get update && sudo apt-get install bazel
     sudo apt-get install --only-upgrade bazel
     
-    # tensorflow environment
-    sudo apt-get install python swig python-numpy
-    sudo pip install six numpy wheel
-    
     # install tensorflow
+    sudo apt-get install python swig python-numpy
     git clone https://github.com/tensorflow/tensorflow.git
     cd tensorflow
-    bazel build --config=opt //tensorflow/tools/pip_package:build_pip_package
-    sudo pip install /tmp/tensorflow_pkg/tensorflow-1.0.1-py2-none-any.whl
+    ./configure
+    bazel build --config opt \
+      //tensorflow/java:tensorflow \
+      //tensorflow/java:libtensorflow_jni
+
+Add generated libtensorflow.jar and libtensorflow_jni.so to idea project as library.
