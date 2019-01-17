@@ -1,9 +1,6 @@
 package com.digity
 
-import org.tensorflow.Graph
-import org.tensorflow.Session
-import org.tensorflow.Tensor
-import org.tensorflow.TensorFlow
+import org.tensorflow.*
 
 fun initTensorFlow() {
     Graph().use { graph ->
