@@ -35,7 +35,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
     val config = environment.config.config("digity")
-    val uploadDirPath = config.property("upload.dir").getString()
+    val uploadDirPath = config.property("dirs.upload").getString()
     val uploadDir = File(uploadDirPath)
     if (!uploadDir.mkdirs() && !uploadDir.exists()) {
         throw IOException("Failed to create directory ${uploadDir.absolutePath}")
