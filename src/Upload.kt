@@ -73,10 +73,7 @@ fun Route.upload(uploadDir: File) {
 }
 
 @KtorExperimentalLocationsAPI
-private fun uploadPageHTML(
-    html: HTML,
-    pipelineContext: PipelineContext<Unit, ApplicationCall>
-) {
+private fun uploadPageHTML(html: HTML, pipelineContext: PipelineContext<Unit, ApplicationCall>) {
     with(html) {
         head {
             title { +"Upload Digit" }
