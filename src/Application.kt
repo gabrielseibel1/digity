@@ -34,6 +34,16 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    install(StatusPages) {
+        exception<AuthenticationException> { cause ->
+            call.respond(HttpStatusCode.Unauthorized)
+        }
+        exception<AuthorizationException> { cause ->
+            call.respond(HttpStatusCode.Forbidden)
+        }
+
+    }
+
     val config = environment.config.config("digity")
     val uploadDirPath = config.property("dirs.upload").getString()
     val uploadDir = File(uploadDirPath)
@@ -43,15 +53,6 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         upload(uploadDir)
-
-        get("/") {
-            call.respondHtml {
-                body {
-                    h1 { +"Moreca" }
-                    p { +"Esse é o site da mozi." }
-                }
-            }
-        }
 
         get("/html-dsl") {
             call.respondHtml {
@@ -80,22 +81,12 @@ fun Application.module(testing: Boolean = false) {
             }
         }
 
-        install(StatusPages) {
-            exception<AuthenticationException> { cause ->
-                call.respond(HttpStatusCode.Unauthorized)
-            }
-            exception<AuthorizationException> { cause ->
-                call.respond(HttpStatusCode.Forbidden)
-            }
-
-        }
-
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))
         }
-
-        MnistClassifier().initTensorFlow()
     }
+
+    MnistClassifier().initTensorFlow()
 }
 
 class AuthenticationException : RuntimeException()
