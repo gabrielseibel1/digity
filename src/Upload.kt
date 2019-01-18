@@ -9,6 +9,7 @@ import io.ktor.network.util.ioCoroutineDispatcher
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respondText
 import io.ktor.routing.*
+import io.ktor.util.pipeline.PipelineContext
 import kotlinx.coroutines.*
 import kotlinx.html.*
 import java.io.File
@@ -24,27 +25,7 @@ fun Route.upload(uploadDir: File) {
      */
     get<Upload> {
         call.respondHtml {
-            head {
-                title { +"Upload Digit" }
-            }
-            body {
-                h1 { +"Upload Digit" }
-                p {
-                    +"Please choose an image that contains the drawing of a single digit."
-                }
-
-                form(
-                    action = call.url(Upload()),
-                    encType = FormEncType.multipartFormData,
-                    method = FormMethod.post,
-                    classes = "pure-form-stacked"
-                ) {
-                    acceptCharset = "utf-8"
-
-                    fileInput { name = "file"; accept = "image/jpg, image/png" }
-                    submitInput(classes = "pure-button pure-button-primary") { value = "Upload" }
-                }
-            }
+            uploadPageHTML(this, this@get)
         }
     }
 
@@ -88,6 +69,36 @@ fun Route.upload(uploadDir: File) {
         }
 
         call.respondText { Gson().toJson(imageFile) }
+    }
+}
+
+@KtorExperimentalLocationsAPI
+private fun uploadPageHTML(
+    html: HTML,
+    pipelineContext: PipelineContext<Unit, ApplicationCall>
+) {
+    with(html) {
+        head {
+            title { +"Upload Digit" }
+        }
+        body {
+            h1 { +"Upload Digit" }
+            p {
+                +"Please choose an image that contains the drawing of a single digit."
+            }
+
+            form(
+                action = pipelineContext.call.url(Upload()),
+                encType = FormEncType.multipartFormData,
+                method = FormMethod.post,
+                classes = "pure-form-stacked"
+            ) {
+                acceptCharset = "utf-8"
+
+                fileInput { name = "file"; accept = "image/jpg, image/png" }
+                submitInput(classes = "pure-button pure-button-primary") { value = "Upload" }
+            }
+        }
     }
 }
 
