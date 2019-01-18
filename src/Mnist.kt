@@ -67,8 +67,9 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
             val pixels = mutableListOf<Float>()
 
             for (p in 0 until EXPECTED_IMAGE_SIZE * EXPECTED_IMAGE_SIZE) {
-                val pixel = imagesBytes.copyOfRange(byteOffset, ++byteOffset).asFloat()
+                val pixel = imagesBytes.copyOfRange(byteOffset, byteOffset + 1).asFloat()
                 pixels.add(pixel)
+                ++byteOffset
             }
 
             allImages.add(pixels.toTypedArray())
@@ -86,9 +87,9 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
 
         // add a label to the list for each item
         for (i in 0 until EXPECTED_NUM_ITEMS) {
-
-            val label = labelsBytes.copyOfRange(byteOffset, ++byteOffset).asInt()
+            val label = labelsBytes.copyOfRange(byteOffset, byteOffset + 1).asInt()
             allLabels.add(label)
+            ++byteOffset
         }
 
         return allLabels.toList()
@@ -102,9 +103,9 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
         } else if (this.size == 1) {
             val buffer = ByteBuffer.wrap(
                 byteArrayOf(
-                    0xFF.toByte(),
-                    0xFF.toByte(),
-                    0xFF.toByte(),
+                    0x00.toByte(),
+                    0x00.toByte(),
+                    0x00.toByte(),
                     this[0].and(0xFF.toByte())
                 )
             )
