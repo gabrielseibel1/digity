@@ -128,3 +128,16 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
         private const val LABELS_HEADER_BYTES = 8 //two 32bit Ints
     }
 }
+
+fun Array<Float>.displayImage() {
+    this.forEachIndexed { index, fl ->
+        if (index % 28 == 0) print("\n")
+
+        val ch: Char = when (fl) {
+            0F -> ' ' // space
+            else -> 219.toChar() // filled square
+        }
+
+        print("$ch ")
+    }
+}

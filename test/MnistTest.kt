@@ -1,4 +1,5 @@
 import com.digity.Mnist
+import com.digity.displayImage
 import kotlin.test.Test
 
 class MnistTest {
@@ -17,5 +18,7 @@ class MnistTest {
         }
 
         assert(mnist.valid)
+
+        mnist.images.forEach { it.displayImage() }
     }
 }
