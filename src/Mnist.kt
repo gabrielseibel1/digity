@@ -135,7 +135,7 @@ fun Array<Float>.displayImage() {
 
         val ch: Char = when (fl) {
             0F -> ' ' // space
-            else -> 219.toChar() // filled square
+            else -> 88.toChar() // filled square
         }
 
         print("$ch ")
