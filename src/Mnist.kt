@@ -2,6 +2,7 @@ package com.digity
 
 import java.io.File
 import java.nio.ByteBuffer
+import kotlin.experimental.and
 
 class Mnist(private val imagesPath: String, private val labelsPath: String) {
 
@@ -49,7 +50,7 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
         val checkNumber = labelsBytes.copyOfRange(0, 4).asInt()
         val numLabels = labelsBytes.copyOfRange(4, 8).asInt()
 
-        return checkNumber == IMAGES_VALIDATION_NUMBER &&
+        return checkNumber == LABELS_VALIDATION_NUMBER &&
                 numLabels == EXPECTED_NUM_ITEMS
     }
 
@@ -94,13 +95,27 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
     }
 
     private fun ByteArray.asInt(): Int {
-        val buffer = ByteBuffer.wrap(this)
-        return buffer.int
+        if (this.size == 4) {
+            val buffer = ByteBuffer.wrap(this)
+            return buffer.int
+
+        } else if (this.size == 1) {
+            val buffer = ByteBuffer.wrap(
+                byteArrayOf(
+                    0xFF.toByte(),
+                    0xFF.toByte(),
+                    0xFF.toByte(),
+                    this[0].and(0xFF.toByte())
+                )
+            )
+            return buffer.int
+        }
+
+        return -1
     }
 
     private fun ByteArray.asFloat(): Float {
-        val buffer = ByteBuffer.wrap(this)
-        return buffer.float
+        return this.asInt().toFloat()
     }
 
     private companion object {
