@@ -25,3 +25,17 @@ fun initTensorFlow() {
         }
     }
 }
+
+fun List<Float>.indexOfMax(): Int {
+    var max = 0F
+    var maxIndex = 0
+
+    this.forEachIndexed { index, float ->
+        if (float > max) {
+            max = float
+            maxIndex = index
+        }
+    }
+
+    return maxIndex
+}

@@ -1,3 +1,5 @@
+import com.digity.Mnist
+import com.digity.indexOfMax
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import org.tensorflow.SavedModelBundle
@@ -40,4 +42,52 @@ class TensorFlowTest {
             }
         }
     }
+
+    @Test
+    fun testMnistAccuracy() {
+        withTestApplication {
+            println("Hello from TensorFlow ${TensorFlow.version()}")
+
+            // obtain test data
+            val mnist = Mnist("mnist/t10k-images.idx3-ubyte", "mnist/t10k-labels.idx1-ubyte")
+            assert(mnist.valid)
+
+            // obtain saved model
+            val model = SavedModelBundle.load("model", "serve")
+            val graph = model.graph()
+            val session = model.session()
+
+            // count correct predictions over dataset
+            var correctPredictions = 0
+            graph.use {
+                session.use {
+                    mnist.images.forEachIndexed { index, image ->
+
+                        // feed image
+                        val result = session.runner()
+                            .feed("input_tensor", Tensor.create(arrayOf(image)))
+                            .fetch("output_layer/Softmax")
+                            .run()[0]
+
+                        // get result
+                        val probabilities = arrayOf(FloatArray(10))
+                        result.copyTo(probabilities)
+                        val prediction = probabilities[0].toList().indexOfMax()
+
+                        // compare with expected label
+                        val expectedLabel = mnist.labels[index]
+                        if (prediction == expectedLabel) ++correctPredictions
+
+                        println("Expected $expectedLabel and got $prediction (${probabilities[0].toList()})")
+                    }
+                }
+            }
+
+            val accuracy = correctPredictions/mnist.images.size
+            println("Accuracy for MNIST test set = $accuracy")
+            assert(accuracy > 97F)
+        }
+    }
+
+
 }
