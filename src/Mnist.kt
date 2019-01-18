@@ -67,7 +67,7 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
             val pixels = mutableListOf<Float>()
 
             for (p in 0 until EXPECTED_IMAGE_SIZE * EXPECTED_IMAGE_SIZE) {
-                val pixel = imagesBytes.copyOfRange(byteOffset, byteOffset + 1).asFloat()
+                val pixel = imagesBytes.copyOfRange(byteOffset, byteOffset + 1).asFloat() / 255
                 pixels.add(pixel)
                 ++byteOffset
             }
