@@ -4,7 +4,7 @@ import org.tensorflow.*
 import java.io.Closeable
 import java.nio.FloatBuffer
 
-class MnistClassifier : Closeable{
+class MnistClassifier : Closeable {
 
     val model: SavedModelBundle = SavedModelBundle.load("model", "serve")
 
