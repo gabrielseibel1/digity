@@ -7,7 +7,7 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
 
     val images: List<Array<Float>>
     val labels: List<Int>
-    val success: Boolean
+    val valid: Boolean
 
     init {
         if (validImagesHeader() and validLabelsHeader()) {
@@ -22,7 +22,7 @@ class Mnist(private val imagesPath: String, private val labelsPath: String) {
 
         }
 
-        success = images.size == EXPECTED_NUM_ITEMS && labels.size == EXPECTED_NUM_ITEMS
+        valid = images.size == EXPECTED_NUM_ITEMS && labels.size == EXPECTED_NUM_ITEMS
     }
 
     private fun validImagesHeader(): Boolean {
