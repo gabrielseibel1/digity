@@ -62,7 +62,8 @@ fun Route.upload(uploadDir: File) {
                     imageFile = file
                 }
 
-                else -> {}
+                else -> {
+                }
             }
 
             part.dispose()
