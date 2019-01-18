@@ -94,7 +94,7 @@ fun Application.module(testing: Boolean = false) {
             call.respond(mapOf("hello" to "world"))
         }
 
-        initTensorFlow()
+        MnistClassifier().initTensorFlow()
     }
 }
 

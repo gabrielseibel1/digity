@@ -1,5 +1,6 @@
+
 import com.digity.Mnist
-import com.digity.indexOfMax
+import com.digity.MnistClassifier
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import org.tensorflow.SavedModelBundle
@@ -7,7 +8,7 @@ import org.tensorflow.Tensor
 import org.tensorflow.TensorFlow
 import kotlin.test.Test
 
-class TensorFlowTest {
+class MnistClassifierTest {
 
     @KtorExperimentalAPI
     @Test
@@ -27,7 +28,7 @@ class TensorFlowTest {
 
             graph.use {
                 session.use {
-                    val input = Array(1) { Array(784) { 0F } }
+                    val input = Array(1) { Array(28) { Array(28) { 0F } } }
 
                     val result = session.runner()
                         .feed("input_tensor", Tensor.create(input))
@@ -53,41 +54,28 @@ class TensorFlowTest {
             assert(mnist.valid)
 
             // obtain saved model
-            val model = SavedModelBundle.load("model", "serve")
-            val graph = model.graph()
-            val session = model.session()
+            val classifier = MnistClassifier()
 
             // count correct predictions over dataset
             var correctPredictions = 0
-            graph.use {
-                session.use {
-                    mnist.images.forEachIndexed { index, image ->
+            classifier.use {
+                mnist.images.forEachIndexed { index, image ->
 
-                        // feed image
-                        val result = session.runner()
-                            .feed("input_tensor", Tensor.create(arrayOf(image)))
-                            .fetch("output_layer/Softmax")
-                            .run()[0]
+                    val prediction = classifier.predict(image)
 
-                        // get result
-                        val probabilities = arrayOf(FloatArray(10))
-                        result.copyTo(probabilities)
-                        val prediction = probabilities[0].toList().indexOfMax()
+                    // compare with expected label
+                    val expectedLabel = mnist.labels[index]
+                    if (prediction == expectedLabel) ++correctPredictions
 
-                        // compare with expected label
-                        val expectedLabel = mnist.labels[index]
-                        if (prediction == expectedLabel) ++correctPredictions
-
-                        println("Expected $expectedLabel and got $prediction (${probabilities[0].toList()})")
-                    }
+                    println(image.toList())
+                    println("Expected $expectedLabel and got $prediction")
                 }
             }
 
-            val accuracy = correctPredictions/mnist.images.size
-            println("Accuracy for MNIST test set = $accuracy")
-            assert(accuracy > 97F)
+            val accuracy = correctPredictions.toFloat()/mnist.images.size
+            println("Accuracy for MNIST test set = $accuracy ($correctPredictions/${mnist.images.size})")
+            assert(accuracy > 0.97F)
         }
     }
-
 
 }
