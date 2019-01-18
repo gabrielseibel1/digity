@@ -67,7 +67,6 @@ class MnistClassifierTest {
                     val expectedLabel = mnist.labels[index]
                     if (prediction == expectedLabel) ++correctPredictions
 
-                    println(image.toList())
                     println("Expected $expectedLabel and got $prediction")
                 }
             }
