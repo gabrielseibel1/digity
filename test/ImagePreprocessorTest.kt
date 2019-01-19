@@ -6,6 +6,7 @@ class ImagePreprocessorTest {
     @Test
     fun testResizeTo28x28() {
         val ipp = ImagePreprocessor()
-        ipp.getFloatArray("../lena1.png")
+        val floats = ipp.getFloatArray("image/lena1.png")
+        assert(floats.size == 784)
     }
 }
