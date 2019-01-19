@@ -25,7 +25,7 @@ fun Route.upload(uploadDir: File) {
      */
     get<Upload> {
         call.respondHtml {
-            uploadPageHTML(this, this@get)
+            uploadPageHTML(this@get)
         }
     }
 
@@ -37,6 +37,7 @@ fun Route.upload(uploadDir: File) {
         var title = String()
         var imageFile: File? = null
 
+        // multipart processing
         multipart.forEachPart { part ->
             when (part) {
                 is PartData.FormItem -> {
@@ -69,33 +70,69 @@ fun Route.upload(uploadDir: File) {
             part.dispose()
         }
 
-        call.respondText { Gson().toJson(imageFile) }
+        if (imageFile == null) {
+
+            call.respondText { "Unable to process upload :(" }
+
+        } else {
+
+            // image pre-processing
+            val imagePath = imageFile!!.absolutePath
+            val floatArray = ImagePreprocessor().getFloatArray(imagePath)
+            floatArray.displayImage()
+
+            // prediction
+            val classifier = MnistClassifier()
+            val prediction = classifier.predict(floatArray)
+
+            call.respondHtml {
+                predictionPageHTML(imagePath, prediction)
+            }
+
+            imageFile!!.delete()
+        }
+
+    }
+}
+
+private fun HTML.predictionPageHTML(imagePath: String, prediction: Int) {
+    head {
+        title {
+            +"Prediction"
+        }
+    }
+    body {
+        img { src = "file://$imagePath" }
+        h3 { +"Is this $prediction?" }
+        form(
+            action = "http://localhost:8080"
+        ) {
+            submitInput(classes = "pure-button pure-button-primary") { value = "Try again" }
+        }
     }
 }
 
 @KtorExperimentalLocationsAPI
-private fun uploadPageHTML(html: HTML, pipelineContext: PipelineContext<Unit, ApplicationCall>) {
-    with(html) {
-        head {
-            title { +"Upload Digit" }
+private fun HTML.uploadPageHTML(pipelineContext: PipelineContext<Unit, ApplicationCall>) {
+    head {
+        title { +"Upload Digit" }
+    }
+    body {
+        h1 { +"Upload Digit" }
+        p {
+            +"Please choose an image that contains the drawing of a single digit."
         }
-        body {
-            h1 { +"Upload Digit" }
-            p {
-                +"Please choose an image that contains the drawing of a single digit."
-            }
 
-            form(
-                action = pipelineContext.call.url(Upload()),
-                encType = FormEncType.multipartFormData,
-                method = FormMethod.post,
-                classes = "pure-form-stacked"
-            ) {
-                acceptCharset = "utf-8"
+        form(
+            action = pipelineContext.call.url(Upload()),
+            encType = FormEncType.multipartFormData,
+            method = FormMethod.post,
+            classes = "pure-form-stacked"
+        ) {
+            acceptCharset = "utf-8"
 
-                fileInput { name = "file"; accept = "image/jpg, image/png" }
-                submitInput(classes = "pure-button pure-button-primary") { value = "Upload" }
-            }
+            fileInput { name = "file"; accept = "image/jpg, image/png" }
+            submitInput(classes = "pure-button pure-button-primary") { value = "Upload" }
         }
     }
 }
