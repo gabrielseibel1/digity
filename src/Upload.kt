@@ -86,8 +86,17 @@ fun Route.upload(uploadDir: File) {
             call.respondHtml {
                 predictionPageHTML(imageFile!!.name, prediction)
             }
+
+            // delete image when server stops running
+            imageFile!!.deleteOnExit()
         }
 
+    }
+}
+
+private fun removePastUploads(uploadDir: File) {
+    uploadDir.walk().forEach { file ->
+        if (file.name.startsWith("upload-")) file.delete()
     }
 }
 
