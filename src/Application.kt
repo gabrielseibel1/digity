@@ -10,6 +10,8 @@ import kotlinx.html.*
 import kotlinx.css.*
 import io.ktor.features.*
 import io.ktor.gson.*
+import io.ktor.http.content.files
+import io.ktor.http.content.static
 import io.ktor.locations.*
 import io.ktor.util.KtorExperimentalAPI
 import java.io.File
@@ -53,6 +55,10 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         upload(uploadDir)
+
+        static("static") {
+            files(uploadDirPath)
+        }
 
         get("/html-dsl") {
             call.respondHtml {

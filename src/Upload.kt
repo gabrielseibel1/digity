@@ -1,11 +1,9 @@
 package com.digity
 
-import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.content.*
 import io.ktor.locations.*
-import io.ktor.network.util.ioCoroutineDispatcher
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respondText
 import io.ktor.routing.*
@@ -77,7 +75,7 @@ fun Route.upload(uploadDir: File) {
         } else {
 
             // image pre-processing
-            val imagePath = imageFile!!.absolutePath
+            val imagePath = uploadDir.path + "/" + imageFile!!.name
             val floatArray = ImagePreprocessor().getFloatArray(imagePath)
             floatArray.displayImage()
 
@@ -86,23 +84,21 @@ fun Route.upload(uploadDir: File) {
             val prediction = classifier.predict(floatArray)
 
             call.respondHtml {
-                predictionPageHTML(imagePath, prediction)
+                predictionPageHTML(imageFile!!.name, prediction)
             }
-
-            imageFile!!.delete()
         }
 
     }
 }
 
-private fun HTML.predictionPageHTML(imagePath: String, prediction: Int) {
+private fun HTML.predictionPageHTML(imageName: String, prediction: Int) {
     head {
         title {
             +"Prediction"
         }
     }
     body {
-        img { src = "file://$imagePath" }
+        img { src = "http://localhost:8080/static/$imageName" }
         h3 { +"Is this $prediction?" }
         form(
             action = "http://localhost:8080"
