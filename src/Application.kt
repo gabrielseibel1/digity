@@ -46,6 +46,10 @@ fun Application.module(testing: Boolean = false) {
 
     }
 
+    install(CORS) {
+        anyHost()
+    }
+
     val config = environment.config.config("digity")
     val uploadDirPath = config.property("dirs.upload").getString()
     val uploadDir = File(uploadDirPath)
