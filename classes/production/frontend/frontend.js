@@ -53,7 +53,7 @@ var frontend = function (_, Kotlin) {
         var formData = new FormData();
         formData.append('file', tmp$_0);
         var request = new XMLHttpRequest();
-        request.open('POST', 'http://localhost:8080');
+        request.open('POST', 'http://localhost:8080/api/upload');
         request.onreadystatechange = main$lambda$lambda$lambda$lambda(request, request);
         request.send(formData);
       }

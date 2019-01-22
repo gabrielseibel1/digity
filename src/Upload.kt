@@ -1,18 +1,13 @@
 package com.digity
 
-import com.google.gson.Gson
 import io.ktor.application.*
-import io.ktor.html.*
 import io.ktor.http.content.*
 import io.ktor.locations.*
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
-import io.ktor.response.respondFile
 import io.ktor.response.respondText
 import io.ktor.routing.*
-import io.ktor.util.pipeline.PipelineContext
 import kotlinx.coroutines.*
-import kotlinx.html.*
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -22,16 +17,9 @@ import java.io.OutputStream
 fun Route.upload(uploadDir: File) {
 
     /**
-     * Route to serve HTML to upload file
-     */
-    get<Upload> {
-        call.respondFile(File("index.html"))
-    }
-
-    /**
      * Route to process uploaded file
      */
-    post<Upload> {
+    post<API.Upload> {
         val multipart = call.receiveMultipart()
         var title = String()
         var imageFile: File? = null
@@ -93,12 +81,6 @@ fun Route.upload(uploadDir: File) {
             )
         }
 
-    }
-}
-
-private fun removePastUploads(uploadDir: File) {
-    uploadDir.walk().forEach { file ->
-        if (file.name.startsWith("upload-")) file.delete()
     }
 }
 

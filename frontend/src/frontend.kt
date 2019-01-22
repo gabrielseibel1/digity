@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 
             val request = XMLHttpRequest()
             with(request) {
-                open("POST", "http://localhost:8080")
+                open("POST", "http://localhost:8080/api/upload")
                 onreadystatechange = {
 
                     // if call succeeded, update UI accordingly
