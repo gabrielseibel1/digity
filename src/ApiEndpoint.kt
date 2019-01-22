@@ -1,6 +1,6 @@
 package com.digity
 
-//todo: Use "common" module to share model with server
+//todo: Use "common" module to share model with frontend
 enum class ApiEndpoint {
     UPLOAD;
 

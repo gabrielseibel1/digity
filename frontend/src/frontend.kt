@@ -14,9 +14,11 @@ fun main(args: Array<String>) {
         // if user has chosen file
         inputElement.files?.get(0)?.let { file ->
 
+            // get form data to append to request
             val formData = FormData()
             formData.append("file", file)
 
+            // build and send POST request
             val request = XMLHttpRequest()
             with(request) {
                 open("POST", ApiEndpoint.UPLOAD.path())
@@ -25,8 +27,8 @@ fun main(args: Array<String>) {
                     // if call succeeded, update UI accordingly
                     if (request.readyState == XMLHttpRequest.DONE && request.status.toInt() == 200) {
 
-                        val predictionResult = JSON.parse<PredictionResult>(response.toString())
-                        predictionResult.draw()
+                        val result = JSON.parse<ApiResult<PredictionResult>>(response.toString())
+                        result.draw()
                     }
 
                 }
@@ -37,10 +39,19 @@ fun main(args: Array<String>) {
     })
 }
 
-fun PredictionResult.draw() {
+fun ApiResult<PredictionResult>.draw() {
     val image = document.getElementById("digitImage") as HTMLImageElement
     val text = document.getElementById("predictionText") as HTMLParagraphElement
 
-    image.src = imageURL
-    text.innerText = "Is this $prediction ?"
+    if (success) {
+
+        image.src = result.imageURL
+        text.innerText = "Is this ${result.prediction} ?"
+
+    } else {
+
+        image.src = "http://localhost:8080/static/question_mark.png"
+        text.innerText = message
+
+    }
 }

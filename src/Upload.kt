@@ -59,7 +59,13 @@ fun Route.upload(uploadDir: File) {
 
         if (imageFile == null) {
 
-            call.respondText { "Unable to process upload :(" }
+            call.respond(
+                ApiResult(
+                    PredictionResult(0, ""),
+                    false,
+                    "Error while processing the upload."
+                )
+            )
 
         } else {
 
@@ -77,7 +83,9 @@ fun Route.upload(uploadDir: File) {
 
             // respond with prediction object
             call.respond(
-                PredictionResult(prediction, ApiEndpoint.ROOT + "/static/${imageFile!!.name}")
+                ApiResult(
+                    PredictionResult(prediction, ApiEndpoint.ROOT + "/static/${imageFile!!.name}")
+                )
             )
         }
 
