@@ -46,10 +46,6 @@ fun Application.module(testing: Boolean = false) {
 
     }
 
-    install(CORS) {
-        anyHost()
-    }
-
     val config = environment.config.config("digity")
     val uploadDirPath = config.property("dirs.upload").getString()
     val uploadDir = File(uploadDirPath)
@@ -66,19 +62,6 @@ fun Application.module(testing: Boolean = false) {
             files("classes/production/frontend")
         }
 
-        get("/html-dsl") {
-            call.respondHtml {
-                body {
-                    h1 { +"HTML" }
-                    ul {
-                        for (n in 1..10) {
-                            li { +"$n" }
-                        }
-                    }
-                }
-            }
-        }
-
         get("/styles.css") {
             call.respondCss {
                 body {
@@ -91,10 +74,6 @@ fun Application.module(testing: Boolean = false) {
                     color = Color.blue
                 }
             }
-        }
-
-        get("/json/gson") {
-            call.respond(mapOf("hello" to "world"))
         }
     }
 
