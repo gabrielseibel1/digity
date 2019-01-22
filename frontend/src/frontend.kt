@@ -1,4 +1,5 @@
 import org.w3c.dom.*
+import org.w3c.dom.url.URL
 import org.w3c.files.get
 import org.w3c.xhr.FormData
 import org.w3c.xhr.XMLHttpRequest
@@ -25,6 +26,7 @@ fun main(args: Array<String>) {
                     // if call succeeded
                     if (request.readyState == XMLHttpRequest.DONE && request.status.toInt() == 200) {
 
+                        updateUI("", 0)
                         println(request.response)
                     }
 
@@ -34,4 +36,9 @@ fun main(args: Array<String>) {
         }
 
     })
+}
+
+fun updateUI(imageURL: String, prediction: Int) {
+    val image = document.getElementById("digitImage") as HTMLImageElement
+    image.src = "https://www.gettyimages.com/gi-resources/images/CreativeLandingPage/HP_Sept_24_2018/CR3_GettyImages-159018836.jpg"
 }
