@@ -1,5 +1,6 @@
 package com.digity
 
+import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.content.*
@@ -84,15 +85,13 @@ fun Route.upload(uploadDir: File) {
             val classifier = MnistClassifier()
             val prediction = classifier.predict(floatArray)
 
-            call.respond(
-                mapOf(
-                    "image" to "http://localhost:8080/static/${imageFile!!.name}",
-                    "prediction" to prediction
-                )
-            )
-
-            // delete image when server stops running
+            // mark to delete image when server stops running
             imageFile!!.deleteOnExit()
+
+            // respond with prediction object
+            call.respond(
+                PredictionResult(prediction, "http://localhost:8080/static/${imageFile!!.name}")
+            )
         }
 
     }

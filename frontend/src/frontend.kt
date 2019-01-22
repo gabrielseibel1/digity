@@ -1,5 +1,4 @@
 import org.w3c.dom.*
-import org.w3c.dom.url.URL
 import org.w3c.files.get
 import org.w3c.xhr.FormData
 import org.w3c.xhr.XMLHttpRequest
@@ -23,11 +22,11 @@ fun main(args: Array<String>) {
                 open("POST", "http://localhost:8080")
                 onreadystatechange = {
 
-                    // if call succeeded
+                    // if call succeeded, update UI accordingly
                     if (request.readyState == XMLHttpRequest.DONE && request.status.toInt() == 200) {
 
-                        updateUI("", 0)
-                        println(request.response)
+                        val predictionResult = JSON.parse<PredictionResult>(response.toString())
+                        predictionResult.draw()
                     }
 
                 }
@@ -38,7 +37,10 @@ fun main(args: Array<String>) {
     })
 }
 
-fun updateUI(imageURL: String, prediction: Int) {
+fun PredictionResult.draw() {
     val image = document.getElementById("digitImage") as HTMLImageElement
-    image.src = "https://www.gettyimages.com/gi-resources/images/CreativeLandingPage/HP_Sept_24_2018/CR3_GettyImages-159018836.jpg"
+    val text = document.getElementById("predictionText") as HTMLParagraphElement
+
+    image.src = imageURL
+    text.innerText = "Is this $prediction ?"
 }
