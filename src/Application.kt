@@ -62,6 +62,8 @@ fun Application.module(testing: Boolean = false) {
 
         static("static") {
             files(uploadDirPath)
+            files("classes/production/frontend/lib")
+            files("classes/production/frontend")
         }
 
         get("/html-dsl") {

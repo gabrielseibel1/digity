@@ -7,6 +7,7 @@ import io.ktor.http.content.*
 import io.ktor.locations.*
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
+import io.ktor.response.respondFile
 import io.ktor.response.respondText
 import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
@@ -24,9 +25,7 @@ fun Route.upload(uploadDir: File) {
      * Route to serve HTML to upload file
      */
     get<Upload> {
-        call.respondHtml {
-            uploadPageHTML(this@get)
-        }
+        call.respondFile(File("index.html"))
     }
 
     /**
@@ -100,48 +99,6 @@ fun Route.upload(uploadDir: File) {
 private fun removePastUploads(uploadDir: File) {
     uploadDir.walk().forEach { file ->
         if (file.name.startsWith("upload-")) file.delete()
-    }
-}
-
-private fun HTML.predictionPageHTML(imageName: String, prediction: Int) {
-    head {
-        title {
-            +"Prediction"
-        }
-    }
-    body {
-        img { src = "http://localhost:8080/static/$imageName" }
-        h3 { +"Is this $prediction?" }
-        form(
-            action = "http://localhost:8080"
-        ) {
-            submitInput(classes = "pure-button pure-button-primary") { value = "Try again" }
-        }
-    }
-}
-
-@KtorExperimentalLocationsAPI
-private fun HTML.uploadPageHTML(pipelineContext: PipelineContext<Unit, ApplicationCall>) {
-    head {
-        title { +"Upload Digit" }
-    }
-    body {
-        h1 { +"Upload Digit" }
-        p {
-            +"Please choose an image that contains the drawing of a single digit."
-        }
-
-        form(
-            action = pipelineContext.call.url(Upload()),
-            encType = FormEncType.multipartFormData,
-            method = FormMethod.post,
-            classes = "pure-form-stacked"
-        ) {
-            acceptCharset = "utf-8"
-
-            fileInput { name = "file"; accept = "image/jpg, image/png" }
-            submitInput(classes = "pure-button pure-button-primary") { value = "Upload" }
-        }
     }
 }
 
