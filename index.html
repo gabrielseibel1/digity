@@ -1,27 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Digity</title>
+
+<meta charset="utf-8">
+<title>Digity</title>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/static/style.css">
+
 </head>
 <body>
 
-    <h1>Upload Digit</h1>
-    <p>Please choose an image that contains the drawing of a single digit.</p>
+<header id="mainHeader">
+    <div class="container">
+        <h1>d1g17y</h1>
+    </div>
+</header>
+
+<div class="container">
+    <section id="mainContent">
+
+        <h1>Interpret Handwritten Digit</h1>
+        <p>Digity knows what is the handwritten digit contained in an image!<br>
+        Works best with clear and light backgrounds, with dark contrasting strokes.</p>
 
 
-    <form name="form_input" enctype="multipart/form-data">
+        <form name="form_input" enctype="multipart/form-data">
 
-        <input type="file" id="myFileField" name="file" accept="image/jpeg"/>
-        <button type="button" id="myButton">Enter</button>
+            <input type="file" id="filePicker" name="file" accept="image/jpeg"/>
+            <button type="button" id="predictButton" class="myButton">Get Prediction</button>
 
-    </form>
+        </form>
 
-    <img id="digitImage" src="http://localhost:8080/static/question_mark.png" width="150px" height="150px">
-    <p id="predictionText"></p>
+        <div class="container" id="predictionContainer">
+            <p id="predictionText" class="centered"></p>
+            <img id="digitImage" class="centered" src="http://localhost:8080/static/question_mark.png">
+        </div>
 
-    <script src="http://localhost:8080/static/kotlin.js"></script>
-    <script src="http://localhost:8080/static/frontend.js"></script>
+    </section>
+</div>
+
+<script src="http://localhost:8080/static/kotlin.js"></script>
+<script src="http://localhost:8080/static/frontend.js"></script>
+
+<footer id="mainFooter">
+    <div class="container">
+        <p>Made by Gabriel Seibel using TensorFlow, OpenCV and Kotlin</p>
+    </div>
+</footer>
 
 </body>
 </html>

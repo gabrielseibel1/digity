@@ -5,8 +5,8 @@ import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 
 fun main(args: Array<String>) {
-    val inputElement = document.getElementById("myFileField") as HTMLInputElement
-    val button = document.getElementById("myButton") as HTMLButtonElement
+    val inputElement = document.getElementById("filePicker") as HTMLInputElement
+    val button = document.getElementById("predictButton") as HTMLButtonElement
 
     // attach function to button
     button.addEventListener("click", {

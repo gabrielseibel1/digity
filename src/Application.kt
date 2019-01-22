@@ -65,6 +65,7 @@ fun Application.module(testing: Boolean = false) {
             files(uploadDirPath)
             files("classes/production/frontend/lib")
             files("classes/production/frontend")
+            files("frontend/css")
         }
 
         get("/styles.css") {

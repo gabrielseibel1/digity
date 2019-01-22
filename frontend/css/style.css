@@ -1,0 +1,63 @@
+body {
+    background-color:white;
+    color:gray(80);
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:16px;
+    margin:0;
+    padding: 0;
+}
+
+.container {
+    width: 85%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.centered {
+    max-width: 500px;
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
+
+.myButton {
+    background: #3d5afe;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.myButton:hover {
+    background: #0031ca;
+}
+
+.myButton:active {
+    background: #8187ff;
+}
+
+#mainHeader {
+    background: #ffeb3b;
+    color: black;
+    overflow: hidden;
+}
+
+#predictionText {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-weight: bold;
+    font-size: larger;
+}
+
+#digitImage {
+    max-width: 250px;
+}
+
+#mainFooter {
+    margin-top: 40px;
+    font-style: italic;
+    alignment: bottom;
+}
