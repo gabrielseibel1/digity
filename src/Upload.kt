@@ -77,7 +77,7 @@ fun Route.upload(uploadDir: File) {
 
             // respond with prediction object
             call.respond(
-                PredictionResult(prediction, "http://localhost:8080/static/${imageFile!!.name}")
+                PredictionResult(prediction, ApiEndpoint.ROOT + "/static/${imageFile!!.name}")
             )
         }
 

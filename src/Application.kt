@@ -18,10 +18,10 @@ import java.io.IOException
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 @KtorExperimentalLocationsAPI
-@Location("/api")
+@Location(ApiEndpoint.REL_API)
 class API {
 
-    @Location("/upload")
+    @Location(ApiEndpoint.REL_UPLOAD)
     class Upload
 }
 
