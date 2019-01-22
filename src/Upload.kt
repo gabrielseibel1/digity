@@ -5,6 +5,7 @@ import io.ktor.html.*
 import io.ktor.http.content.*
 import io.ktor.locations.*
 import io.ktor.request.receiveMultipart
+import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
@@ -83,9 +84,12 @@ fun Route.upload(uploadDir: File) {
             val classifier = MnistClassifier()
             val prediction = classifier.predict(floatArray)
 
-            call.respondHtml {
-                predictionPageHTML(imageFile!!.name, prediction)
-            }
+            call.respond(
+                mapOf(
+                    "image" to "http://localhost:8080/static/${imageFile!!.name}",
+                    "prediction" to prediction
+                )
+            )
 
             // delete image when server stops running
             imageFile!!.deleteOnExit()
