@@ -65,8 +65,8 @@ fun Application.module(testing: Boolean = false) {
         // static files route
         static("static") {
             files(uploadDirPath)
-            files("classes/production/frontend/lib")
-            files("classes/production/frontend")
+            files("classes/production/digity.frontend/lib")
+            files("classes/production/digity.frontend")
             files("frontend/css")
         }
     }
