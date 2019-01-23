@@ -4,8 +4,6 @@ import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.http.*
-import kotlinx.html.*
-import kotlinx.css.*
 import io.ktor.features.*
 import io.ktor.gson.*
 import io.ktor.http.content.files
@@ -43,6 +41,10 @@ fun Application.module(testing: Boolean = false) {
 
     }
 
+    install(CORS) {
+        anyHost()
+    }
+
     val config = environment.config.config("digity")
     val uploadDirPath = config.property("dirs.upload").getString()
     val uploadDir = File(uploadDirPath)
@@ -67,20 +69,6 @@ fun Application.module(testing: Boolean = false) {
             files("classes/production/frontend")
             files("frontend/css")
         }
-
-        get("/styles.css") {
-            call.respondCss {
-                body {
-                    backgroundColor = Color.red
-                }
-                p {
-                    fontSize = 2.em
-                }
-                rule("p.myclass") {
-                    color = Color.blue
-                }
-            }
-        }
     }
 
     MnistClassifier().initTensorFlow()
@@ -88,17 +76,3 @@ fun Application.module(testing: Boolean = false) {
 
 class AuthenticationException : RuntimeException()
 class AuthorizationException : RuntimeException()
-
-fun FlowOrMetaDataContent.styleCss(builder: CSSBuilder.() -> Unit) {
-    style(type = ContentType.Text.CSS.toString()) {
-        +CSSBuilder().apply(builder).toString()
-    }
-}
-
-fun CommonAttributeGroupFacade.style(builder: CSSBuilder.() -> Unit) {
-    this.style = CSSBuilder().apply(builder).toString().trim()
-}
-
-suspend inline fun ApplicationCall.respondCss(builder: CSSBuilder.() -> Unit) {
-    this.respondText(CSSBuilder().apply(builder).toString(), ContentType.Text.CSS)
-}
